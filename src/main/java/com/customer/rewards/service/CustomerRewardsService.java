@@ -2,22 +2,13 @@ package com.customer.rewards.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.customer.rewards.model.CustomerRewards;
+import com.customer.rewards.model.CustomerRewardsResponse;
+import com.customer.rewards.model.TransactionInfo;
 
-import com.customer.rewards.builder.CustomerResponseBuilder;
-import com.customer.rewards.model.TransactionPeriod;
-
-@Service
-public class CustomerRewardsService {
+public interface CustomerRewardsService {
 	
-	@Autowired
-	private CustomerResponseBuilder customerResponseBuilder; 
-	
-	public List<TransactionPeriod> getCalculateMonthlyRewards() {
-		
-		
-		return customerResponseBuilder.buildCustomerRespone();
-	}
+	CustomerRewardsResponse calculateRewardsforaCustomer(Long customerId);
+	List<CustomerRewardsResponse> calculateRewardsforAllCustomers();
 
 }

@@ -25,12 +25,15 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter{
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-		http.csrf().disable()
-		.authorizeRequests()
-		.anyRequest()
-		.authenticated()
-		.and()
-		.httpBasic();
+		http.csrf().disable();
+		http.authorizeRequests().antMatchers("/").permitAll()
+		.antMatchers("/h2-console/**").permitAll()
+        .anyRequest()
+        .authenticated()//all other urls can be access by any authenticated role
+        .and()
+        .httpBasic();
+		http.csrf().ignoringAntMatchers("/h2-console/**");
+		http.headers().frameOptions().sameOrigin();
 	}
 
 	@Autowired

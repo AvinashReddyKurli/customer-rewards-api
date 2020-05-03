@@ -21,8 +21,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import com.customer.rewards.model.CustomerRewardsResponse;
 import com.customer.rewards.service.CustomerRewardsService;
-import com.customer.rewards.model.TransactionPeriod;
 
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
@@ -35,10 +35,10 @@ public class CustomerRewardsControllerTest {
 	private CustomerRewardsService customerRewardsService;
 
 	@Mock
-	private ResponseEntity<List<TransactionPeriod>> response;
+	private ResponseEntity<List<CustomerRewardsResponse>> response;
 
 	@Mock
-	private TransactionPeriod transacationPeriod;
+	private CustomerRewardsResponse customerRewardsResponse;
 
 	@InjectMocks
 	CustomerRewardsController customerRewardsController;
@@ -50,22 +50,22 @@ public class CustomerRewardsControllerTest {
 
 	}
 
-	@DisplayName("Test SpringBoot @GetMonthlyTransactionRewards")
+	@DisplayName("Test SpringBoot @GetMonthlyTransactionRewardsbyCustomerId")
 	@Test
-	public void testGetMonthlyTransactionRewards() throws Exception {
-		List<TransactionPeriod> transacationPeriods = Arrays.asList(new TransactionPeriod());
+	public void testGetMonthlyTransactionRewardsbyCustomerId(Long customerId) throws Exception {
+		CustomerRewardsResponse customerRewardsResponse = new CustomerRewardsResponse();
 
-		when(customerRewardsService.getCalculateMonthlyRewards()).thenReturn(transacationPeriods);
-		this.mockMvc.perform(get("/customer/rewards")).andExpect(status().isOk());
+		when(customerRewardsService.calculateRewardsforaCustomer(customerId)).thenReturn(customerRewardsResponse);
+		this.mockMvc.perform(get("/{customerId}/rewards")).andExpect(status().isOk());
 
 	}
 
-	@DisplayName("Test SpringBoot @GetMonthlyTransactionRewardsIfResponseNull")
+	@DisplayName("Test SpringBoot @GetMonthlyTransactionRewardsbyCustomerIdIfResponseNull")
 	@Test
-	public void testGetMonthlyTransactionRewardsIfResponseNull() throws Exception {
-		List<TransactionPeriod> months = Arrays.asList();
-		when(customerRewardsService.getCalculateMonthlyRewards()).thenReturn(months);
-		this.mockMvc.perform(get("/customer/rewards")).andExpect(status().isNotFound());
+	public void testGetMonthlyTransactionRewardsbyCustomerIdIfResponseNull(Long customerId) throws Exception {
+		CustomerRewardsResponse months = null;
+		when(customerRewardsService.calculateRewardsforaCustomer(customerId)).thenReturn(months);
+		this.mockMvc.perform(get("/{customerId}/rewards")).andExpect(status().isNotFound());
 		
 	}
 }
